@@ -3,6 +3,7 @@ package handlers
 import (
 	"context"
 	"fmt"
+	"time"
 
 	agonesv1 "agones.dev/agones/pkg/apis/agones/v1"
 	"github.com/Octops/gameserver-ingress-controller/internal/runtime"
@@ -84,6 +85,14 @@ func (h *GameSeverEventHandler) Reconcile(ctx context.Context, logger *logrus.En
 	_, err := h.serviceReconciler.Reconcile(ctx, gs)
 	if err != nil {
 		return errors.Wrapf(err, "failed to reconcile service %s", k8sutil.Namespaced(gs))
+	}
+
+	if delayMs, ok := gameserver.HasAnnotation(gs, gameserver.OctopsAnnotationIngressDelay); ok {
+		delay, err := time.ParseDuration(delayMs)
+		if err != nil {
+			return errors.Wrapf(err, "failed to parse ingress delay duration %s, example: '3000ms'", delayMs)
+		}
+		time.Sleep(delay)
 	}
 
 	_, ingReconciled, err := h.ingressReconciler.Reconcile(ctx, gs)

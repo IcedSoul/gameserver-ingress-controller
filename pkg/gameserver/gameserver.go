@@ -13,6 +13,7 @@ const (
 	OctopsAnnotationIngressMode            = "octops.io/gameserver-ingress-mode"
 	OctopsAnnotationIngressDomain          = "octops.io/gameserver-ingress-domain"
 	OctopsAnnotationIngressFQDN            = "octops.io/gameserver-ingress-fqdn"
+	OctopsAnnotationIngressDelay           = "octops.io/gameserver-ingress-delay"
 	OctopsAnnotationTerminateTLS           = "octops.io/terminate-tls"
 	OctopsAnnotationsTLSSecretName         = "octops.io/tls-secret-name"
 	OctopsAnnotationIssuerName             = "octops.io/issuer-tls-name"
