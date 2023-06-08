@@ -71,7 +71,7 @@ spec:
       imagePullSecrets:
         - name: acr-mylink
       containers:
-        - image: registry-intl.cn-hongkong.aliyuncs.com/my-link/gameserver-ingress-controller:0.2.7 # Latest release
+        - image: registry-intl.cn-hongkong.aliyuncs.com/my-link/gameserver-ingress-controller:0.2.8 # Latest release
           name: controller
           ports:
             - containerPort: 30235

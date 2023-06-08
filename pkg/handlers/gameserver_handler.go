@@ -1,11 +1,9 @@
 package handlers
 
 import (
+	agonesv1 "agones.dev/agones/pkg/apis/agones/v1"
 	"context"
 	"fmt"
-	"time"
-
-	agonesv1 "agones.dev/agones/pkg/apis/agones/v1"
 	"github.com/Octops/gameserver-ingress-controller/internal/runtime"
 	"github.com/Octops/gameserver-ingress-controller/pkg/gameserver"
 	"github.com/Octops/gameserver-ingress-controller/pkg/k8sutil"
@@ -15,6 +13,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 	"k8s.io/client-go/kubernetes"
+	"time"
 )
 
 type GameSeverEventHandler struct {
@@ -81,6 +80,18 @@ func (h *GameSeverEventHandler) Reconcile(ctx context.Context, logger *logrus.En
 
 		return nil
 	}
+
+	go func() {
+		err := h.AsyncReconcileServiceAndIngress(ctx, logger, gs)
+		if err != nil {
+			h.logger.Error(err)
+		}
+	}()
+
+	return nil
+}
+
+func (h *GameSeverEventHandler) AsyncReconcileServiceAndIngress(ctx context.Context, logger *logrus.Entry, gs *agonesv1.GameServer) error {
 
 	_, err := h.serviceReconciler.Reconcile(ctx, gs)
 	if err != nil {
