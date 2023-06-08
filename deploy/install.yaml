@@ -68,6 +68,8 @@ spec:
         app: octops-ingress-controller
     spec:
       serviceAccountName: octops-ingress-controller
+      imagePullSecrets:
+        - name: acr-mylink
       containers:
         - image: registry-intl.cn-hongkong.aliyuncs.com/my-link/gameserver-ingress-controller:0.2.7 # Latest release
           name: controller
